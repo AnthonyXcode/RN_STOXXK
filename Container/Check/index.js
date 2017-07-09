@@ -8,9 +8,14 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import ViewPager from 'react-native-viewpager'
+import CheckItem from '../../Component/CheckItem'
 import styles from './styles'
 
 const Pages = ['1', '2', '3']
+const sortBy = require('ramda/src/sortBy')
+const prop = require('ramda/src/prop') 
+const sort = require('ramda/src/sort')
+const reverse = require('ramda/src/reverse')
 
 export default class CheckData extends Component {
     constructor(props) {
@@ -44,7 +49,6 @@ export default class CheckData extends Component {
                 }
             }
         }
-        console.log('sizs', data.length)
         this.setState({ allData: data })
     }
 
@@ -63,13 +67,15 @@ export default class CheckData extends Component {
     renderPage = (item, index) => {
         if (index == 0) {
             const { params } = this.props.navigation.state
-            const items = params.items
+            var sortByDate = sortBy(prop('date'))
+            const items = reverse(sortByDate(params.items))
             return (
                 <View style={{ flex: 1 }}>
+                <CheckItem date={'Date'} high={'High'} open={'Open'} low={'Low'} close={'Close'}/>
                     <FlatList data={items}
                         keyExtractor={(item, index) => index}
                         renderItem={({ item, index }) => this.renderRow(item, index)}
-                        ListHeaderComponent={this.renderHeader()}
+                        initialScrollIndex={items.lenght}
                     />
                 </View>
             )
@@ -88,21 +94,9 @@ export default class CheckData extends Component {
         }
     }
 
-    renderHeader = () => {
-        return (
-            <View>
-                <Text>Date</Text>
-            </View>
-        )
-    }
-
     renderRow = (item, index) => {
-        console.log('index: ' + index)
-        console.log('day: ' + item)
         return (
-            <View>
-                <Text>{item.day}</Text>
-            </View>
+            <CheckItem date={item.date} high={item.high} open={item.open} low={item.low} close={item.close}/>
         )
     }
 

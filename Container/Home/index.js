@@ -60,12 +60,13 @@ export default class HomeScreen extends Component {
                     const monthData = yearData[month]
                     for (var day in monthData) {
                         const dayData = monthData[day]
-                        console.log('day: ' + year + '-' + month + '-' + day + ": " + dayData)
-                        const item = {
-                            year: year,
-                            month: month,
-                            day: day,
-                            data: dayData
+                        const date = `${year}-${month}-${day.substring(0,2)}`
+                        const high = dayData.high
+                        const open = dayData.open
+                        const low = dayData.low
+                        const close = dayData.close         
+                        let item = {
+                            date, high, open, low, close
                         }
                         items.push(item)
                     }
