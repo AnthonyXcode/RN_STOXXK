@@ -11,10 +11,9 @@ import ViewPager from 'react-native-viewpager'
 import CheckItem from '../../Component/CheckItem'
 import styles from './styles'
 
-const Pages = ['1', '2', '3']
+const Pages = ['1']
 const sortBy = require('ramda/src/sortBy')
-const prop = require('ramda/src/prop') 
-const sort = require('ramda/src/sort')
+const prop = require('ramda/src/prop')
 const reverse = require('ramda/src/reverse')
 
 export default class CheckData extends Component {
@@ -23,33 +22,11 @@ export default class CheckData extends Component {
         const ds = new ViewPager.DataSource({ pageHasChanged: (r1, r2) => r1 !== r2 })
         this.state = {
             dataSource: ds.cloneWithPages(Pages),
-            allData: []
         }
     }
 
     static navigationOptions = {
         title: 'Check Data'
-    }
-
-    componentDidMount() {
-        const { params } = this.props.navigation.state
-        const allData = params.allData
-        const data = []
-        for (var year in allData) {
-            const monthData = allData[year]
-            for (var month in monthData) {
-                const dayData = monthData[month]
-                for (var day in dayData) {
-                    const item = {
-                        day: { year },
-                        month: { month },
-                        day: { day }
-                    }
-                    // data.push(item)
-                }
-            }
-        }
-        this.setState({ allData: data })
     }
 
     render() {
@@ -71,7 +48,7 @@ export default class CheckData extends Component {
             const items = reverse(sortByDate(params.items))
             return (
                 <View style={{ flex: 1 }}>
-                <CheckItem date={'Date'} high={'High'} open={'Open'} low={'Low'} close={'Close'}/>
+                    <CheckItem date={'Date'} high={'High'} open={'Open'} low={'Low'} close={'Close'} />
                     <FlatList data={items}
                         keyExtractor={(item, index) => index}
                         renderItem={({ item, index }) => this.renderRow(item, index)}
@@ -79,24 +56,12 @@ export default class CheckData extends Component {
                     />
                 </View>
             )
-        } else if (index == 1) {
-            return (
-                <View style={{ flex: 1 }}>
-                    <Text>{item}</Text>
-                    <Text>{index}</Text>
-                </View>
-            )
-        } else if (index == 2) {
-            return (
-                <View>
-                </View>
-            )
         }
     }
 
     renderRow = (item, index) => {
         return (
-            <CheckItem date={item.date} high={item.high} open={item.open} low={item.low} close={item.close}/>
+            <CheckItem date={item.date} high={item.high} open={item.open} low={item.low} close={item.close} />
         )
     }
 

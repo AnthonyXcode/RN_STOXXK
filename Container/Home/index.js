@@ -16,6 +16,7 @@ import {
 import { StackNavigator } from 'react-navigation';
 import styles from './styles'
 import CheckData from '../Check'
+import CrossRsi from '../CorssRsi'
 import HomeItem from '../../Component/HomeItem'
 import * as firebase from 'firebase';
 
@@ -64,7 +65,7 @@ export default class HomeScreen extends Component {
                         const high = dayData.high
                         const open = dayData.open
                         const low = dayData.low
-                        const close = dayData.close         
+                        const close = dayData.close 
                         let item = {
                             date, high, open, low, close
                         }
@@ -107,6 +108,8 @@ export default class HomeScreen extends Component {
             switch (name) {
                 case 'Check Data':
                     this.props.navigation.navigate('CheckData', { allData: this.state.allData, items: this.state.dataArray })
+                case 'Cross RSI':
+                    this.props.navigation.navigate('CrossRsi', { allData: this.state.allData, items: this.state.dataArray })
             }
         } else {
             Alert.alert('Data are still not ready!', null, [{ text: 'OK', onPress: () => console.log('OK Pressed') }], { cancelable: true })
@@ -116,7 +119,8 @@ export default class HomeScreen extends Component {
 
 const RN_Stock = StackNavigator({
     Home: { screen: HomeScreen },
-    CheckData: { screen: CheckData }
+    CheckData: { screen: CheckData },
+    CrossRsi: { screen: CrossRsi }
 });
 
 AppRegistry.registerComponent('RN_Stock', () => RN_Stock);
