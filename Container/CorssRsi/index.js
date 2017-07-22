@@ -12,6 +12,7 @@ import { StackNavigator } from 'react-navigation';
 import ViewPager from 'react-native-viewpager'
 import styles from './styles'
 import CrossRsiItem from '../../Component/CrossRsiItem'
+import { prepareRsiData } from '../../Helper/CalculateHelper'
 
 const Pages = ['1', '2', '3']
 const sortBy = require('ramda/src/sortBy')
@@ -19,6 +20,11 @@ const prop = require('ramda/src/prop')
 const reverse = require('ramda/src/reverse')
 const merge = require('ramda/src/merge')
 let totalWin = 0
+let totalTrade = 0
+let winCount = 0
+let lossCount = 0
+let win = 0
+let loss = 0
 
 export default class CrossRsi extends Component {
     constructor(props) {
@@ -61,61 +67,68 @@ export default class CrossRsi extends Component {
             </View>)
         } else if (index == 1) {
             return (
-                    <View style={{ flex: 1 }}>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Long Rsi: </Text>
-                            <TextInput
-                                defaultValue={this.state.longRsi.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.longRsi.toString()}
-                                onChangeText={(text) => {
-                                    this.setState({ longRsi: parseInt(text) })
-                                }}
-                            />
-                        </View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Short Rsi: </Text>
-                            <TextInput
-                                defaultValue={this.state.shortRsi.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.shortRsi.toString()}
-                                onChangeText={(text) => {
-                                    this.setState({ shortRsi: parseInt(text) })
-                                }}
-                            />
-                        </View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Valid Rsi: </Text>
-                            <TextInput
-                                defaultValue={this.state.validRsi.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.validRsi.toString()}
-                                onChangeText={(text) => {
-                                    this.setState({ validRsi: parseInt(text) })
-                                }}
-                            />
-                        </View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Valid Days: </Text>
-                            <TextInput
-                                defaultValue={this.state.validDays.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.validDays.toString()}
-                                onChangeText={(text) => {
-                                    this.setState({ validDays: parseInt(text) })
-                                }}
-                            />
-                        </View>
+                <View style={{ flex: 1 }}>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Long Rsi: </Text>
+                        <TextInput
+                            defaultValue={this.state.longRsi.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.longRsi.toString()}
+                            onChangeText={(text) => {
+                                this.setState({ longRsi: parseInt(text) })
+                            }}
+                        />
                     </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Short Rsi: </Text>
+                        <TextInput
+                            defaultValue={this.state.shortRsi.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.shortRsi.toString()}
+                            onChangeText={(text) => {
+                                this.setState({ shortRsi: parseInt(text) })
+                            }}
+                        />
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Valid Rsi: </Text>
+                        <TextInput
+                            defaultValue={this.state.validRsi.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.validRsi.toString()}
+                            onChangeText={(text) => {
+                                this.setState({ validRsi: parseInt(text) })
+                            }}
+                        />
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Valid Days: </Text>
+                        <TextInput
+                            defaultValue={this.state.validDays.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.validDays.toString()}
+                            onChangeText={(text) => {
+                                this.setState({ validDays: parseInt(text) })
+                            }}
+                        />
+                    </View>
+                </View>
             )
         } else {
             return (
                 <View style={{ flex: 1 }}>
-                    <Text>{totalWin}</Text>
+                    <Text>
+                    {'totalWin: '}{totalWin}{'\n'}
+                    {'total trade: '}{totalTrade}{'\n'}
+                    {'Win Count: '}{winCount}{'\n'}
+                    {'Loss Count: '}{lossCount}{'\n'}
+                    {'Win: '}{win}{'\n'}
+                    {'loss: '}{loss}
+                    </Text>
                 </View>)
         }
     }
@@ -134,98 +147,8 @@ export default class CrossRsi extends Component {
         const { params } = this.props.navigation.state
         var sortByDate = sortBy(prop('date'))
         const inputItems = sortByDate(params.items)
-        const outputItems = []
-
-        console.log('data: ', params.items)
-
-        let totalRaise = 0
-        let totalDrop = 0
-
-        for (var i = 0; i < inputItems.length; i++) {
-            if (i == this.state.shortRsi - 1) {
-                const item = this.initRsi(inputItems, this.state.shortRsi, true)
-                outputItems.push(item)
-            }
-
-            if (i > this.state.shortRsi) {
-                const previousItem = inputItems[i - 1]
-                const item = inputItems[i]
-                const outputShortItem = this.countRsiItemForShort(previousItem, item, outputItems[outputItems.length - 1], this.state.shortRsi)
-
-                if (i > this.state.shortRsi - 1 && i < this.state.longRsi - 1) {
-                    outputItems.push(...outputShortItem)
-                } else if (i === this.state.longRsi - 1) {
-                    const item = this.initRsi(inputItems, this.state.longRsi, false)
-                    outputItems.push(merge(item, outputShortItem))
-                } else if (i > this.state.longRsi - 1) {
-                    const outputLongItem = this.countRsiItemForLong(previousItem, item, outputItems[outputItems.length - 1], this.state.longRsi)
-                    outputItems.push(merge(outputShortItem, outputLongItem))
-                }
-            }
-        }
-
-        console.log('output: ', outputItems)
-        return this.countBuyAndSell(outputItems)
-    }
-
-    initRsi = (items, days, isShort) => {
-        let totalRaise = 0
-        let totalDrop = 0
-        for (var i = 0; i < items.length; i++) {
-            if (i == days - 1) break
-            let difference = items[i + 1].close - items[i].close
-            if (difference > 0) {
-                totalRaise += difference
-            } else {
-                totalDrop += Math.abs(difference)
-            }
-        }
-
-        let rsi = (totalRaise / (totalRaise + totalDrop)) * 100
-        let raiseAverage = totalRaise / days
-        let dropAverage = totalDrop / days
-
-        if (isShort) {
-            return { ...items[days], shortRsi: rsi, raiseShortAverage: raiseAverage, dropShortAverage: dropAverage }
-        } else {
-            return { ...items[days], longRsi: rsi, raiseLongAverage: raiseAverage, dropLongAverage: dropAverage }
-        }
-    }
-
-    countRsiItemForShort = (previousItem, item, outputPreviousItem, days) => {
-        let difference = item.close - previousItem.close
-        let outputItem = {}
-
-        let raiseAverage = 0
-        let dropAverage = 0
-        if (difference > 0) {
-            raiseAverage = ((outputPreviousItem.raiseShortAverage * (days - 1)) + difference) / days
-            dropAverage = outputPreviousItem.dropShortAverage * (days - 1) / days
-        } else {
-            raiseAverage = outputPreviousItem.raiseShortAverage * (days - 1) / days
-            dropAverage = (outputPreviousItem.dropShortAverage * (days - 1) + Math.abs(difference)) / days
-        }
-        const rsi = (raiseAverage / (raiseAverage + dropAverage)) * 100
-        const output = { ...item, shortRsi: rsi, raiseShortAverage: raiseAverage, dropShortAverage: dropAverage }
-        return output
-    }
-
-    countRsiItemForLong = (previousItem, item, outputPreviousItem, days) => {
-        let difference = item.close - previousItem.close
-        let outputItem = {}
-
-        let raiseAverage = 0
-        let dropAverage = 0
-        if (difference > 0) {
-            raiseAverage = ((outputPreviousItem.raiseLongAverage * (days - 1)) + difference) / days
-            dropAverage = outputPreviousItem.dropLongAverage * (days - 1) / days
-        } else {
-            raiseAverage = outputPreviousItem.raiseLongAverage * (days - 1) / days
-            dropAverage = (outputPreviousItem.dropLongAverage * (days - 1) + Math.abs(difference)) / days
-        }
-        const rsi = (raiseAverage / (raiseAverage + dropAverage)) * 100
-        const output = { ...item, longRsi: rsi, raiseLongAverage: raiseAverage, dropLongAverage: dropAverage }
-        return output
+        this.resetStaistic()
+        return this.countBuyAndSell(prepareRsiData(inputItems, this.state.shortRsi, this.state.longRsi))
     }
 
     countBuyAndSell = (inputItems) => {
@@ -237,7 +160,7 @@ export default class CrossRsi extends Component {
         let buyLiquidationPosition = 0
         let sellLiquidationPosition = 0
         let wOrL = 0
-        totalWin = 0
+
         for (var i = 20; i < inputItems.length; i++) {
             const previousItem = inputItems[i - 1]
             const item = inputItems[i]
@@ -249,7 +172,7 @@ export default class CrossRsi extends Component {
                     buyLiquidationPosition = 0
                     sell = item.close
                     wOrL = sell - buyOnHand
-                    totalWin += wOrL
+                    this.getStatistic(wOrL)
                 }
                 outputItem.push(merge(inputItems[i], { sell, buy, wOrL }))
                 continue
@@ -260,7 +183,7 @@ export default class CrossRsi extends Component {
                     sellLiquidationPosition = 0
                     buy = item.close
                     wOrL = sellOnHand - buy
-                    totalWin += wOrL
+                    this.getStatistic(wOrL)
                 }
                 outputItem.push(merge(inputItems[i], { sell, buy, wOrL }))
                 continue
@@ -280,5 +203,26 @@ export default class CrossRsi extends Component {
             outputItem.push(merge(inputItems[i], { sell, buy, wOrL }))
         }
         return outputItem
+    }
+
+    resetStaistic = () => {
+        totalTrade = 0
+        totalWin = 0
+        win = 0
+        loss = 0
+        winCount = 0
+        lossCount = 0
+    }
+
+    getStatistic = (wOrL) => {
+        totalWin += wOrL
+        if (wOrL > 0) {
+            win += wOrL
+            winCount += 1
+        } else {
+            loss += wOrL
+            lossCount += 1
+        }
+        totalTrade += 1
     }
 }

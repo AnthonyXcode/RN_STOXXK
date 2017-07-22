@@ -12,13 +12,13 @@ export default class HomeItem extends Component {
     onPress = () => {
         this.props.onItemPress(this.props.data.name)
     }
-
+    
     render() {
         return(
             <TouchableHighlight onPress={this.onPress}>
                 <View style={styles.container}>
                     <Text>{this.props.data.name}</Text>
-                </View>
+                </View>                
             </TouchableHighlight>
         )
     }

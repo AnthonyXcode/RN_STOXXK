@@ -1,9 +1,10 @@
+import Colors from './Colors'
 const commonStyle = {
     buyBackground: {
-        backgroundColor: 'red'
+        backgroundColor: Colors.darkSkyBlue
     },
     sellBackground: {
-        backgroundColor: 'green'
+        backgroundColor: Colors.silver
     }
 }
 export default commonStyle
