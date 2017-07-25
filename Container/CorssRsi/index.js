@@ -19,6 +19,7 @@ const sortBy = require('ramda/src/sortBy')
 const prop = require('ramda/src/prop')
 const reverse = require('ramda/src/reverse')
 const merge = require('ramda/src/merge')
+let items = []
 let totalWin = 0
 let totalTrade = 0
 let winCount = 0
@@ -44,90 +45,96 @@ export default class CrossRsi extends Component {
     }
 
     render() {
+        items = reverse(this.preparaData())
         return (
-            <ViewPager
-                dataSource={this.state.dataSource}
-                renderPage={(item, index) => this.renderPage(item, index)}
-                isLoop={false}
-                autoPlay={false}
-            />
+            <View style={styles.pageContainer}>
+                <ViewPager
+                    dataSource={this.state.dataSource}
+                    renderPage={(item, index) => this.renderPage(item, index)}
+                    isLoop={false}
+                    autoPlay={false}
+                />
+            </View>
         )
     }
 
     renderPage = (item, index) => {
         if (index == 0) {
-            const items = reverse(this.preparaData())
-            return (<View style={{ flex: 1 }}>
+            return (<View style={styles.pageContainer}>
                 <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} />
-                <FlatList
-                    data={items}
-                    renderItem={({ item, index }) => this.renderListItem(item, index)}
-                    keyExtractor={(item, index) => index}
-                />
+                <View style={styles.flatList}>
+                    <FlatList
+                        data={items}
+                        renderItem={({ item, index }) => this.renderListItem(item, index)}
+                        keyExtractor={(item, index) => index}
+                    />
+                </View>
             </View>)
         } else if (index == 1) {
             return (
-                <View style={{ flex: 1 }}>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Long Rsi: </Text>
-                        <TextInput
-                            defaultValue={this.state.longRsi.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.longRsi.toString()}
-                            onChangeText={(text) => {
-                                this.setState({ longRsi: parseInt(text) })
-                            }}
-                        />
+                <TouchableHighlight onPress={Keyboard.dismiss} style={styles.pageContainer}>
+                    <View>
+                        <View style={styles.rowContainer}>
+                            <Text style={styles.text}>Long Rsi: </Text>
+                            <TextInput
+                                defaultValue={this.state.longRsi.toString()}
+                                keyboardType='number-pad'
+                                style={styles.inputText}
+                                placeholder={this.state.longRsi.toString()}
+                                onChangeText={(text) => {
+                                    !!text && this.setState({ longRsi: parseInt(text) })
+                                }}
+                            />
+                        </View>
+                        <View style={styles.rowContainer}>
+                            <Text style={styles.text}>Short Rsi: </Text>
+                            <TextInput
+                                defaultValue={this.state.shortRsi.toString()}
+                                keyboardType='number-pad'
+                                style={styles.inputText}
+                                placeholder={this.state.shortRsi.toString()}
+                                onChangeText={(text) => {
+                                    !!text && this.setState({ shortRsi: parseInt(text) })
+                                }}
+                            />
+                        </View>
+                        <View style={styles.rowContainer}>
+                            <Text style={styles.text}>Valid Rsi: </Text>
+                            <TextInput
+                                defaultValue={this.state.validRsi.toString()}
+                                keyboardType='number-pad'
+                                style={styles.inputText}
+                                placeholder={this.state.validRsi.toString()}
+                                onChangeText={(text) => {
+                                    !!text && this.setState({ validRsi: parseInt(text) })
+                                }}
+                            />
+                        </View>
+                        <View style={styles.rowContainer}>
+                            <Text style={styles.text}>Valid Days: </Text>
+                            <TextInput
+                                defaultValue={this.state.validDays.toString()}
+                                keyboardType='number-pad'
+                                style={styles.inputText}
+                                placeholder={this.state.validDays.toString()}
+                                onChangeText={(text) => {
+                                    text && this.setState({ validDays: parseInt(text) })
+                                }}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Short Rsi: </Text>
-                        <TextInput
-                            defaultValue={this.state.shortRsi.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.shortRsi.toString()}
-                            onChangeText={(text) => {
-                                this.setState({ shortRsi: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Valid Rsi: </Text>
-                        <TextInput
-                            defaultValue={this.state.validRsi.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.validRsi.toString()}
-                            onChangeText={(text) => {
-                                this.setState({ validRsi: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Valid Days: </Text>
-                        <TextInput
-                            defaultValue={this.state.validDays.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.validDays.toString()}
-                            onChangeText={(text) => {
-                                this.setState({ validDays: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                </View>
+                </TouchableHighlight>
             )
         } else {
             return (
-                <View style={{ flex: 1 }}>
+                <View style={styles.pageContainer}>
                     <Text>
-                    {'totalWin: '}{totalWin}{'\n'}
-                    {'total trade: '}{totalTrade}{'\n'}
-                    {'Win Count: '}{winCount}{'\n'}
-                    {'Loss Count: '}{lossCount}{'\n'}
-                    {'Win: '}{win}{'\n'}
-                    {'loss: '}{loss}
+                        {'Total Win: '}{totalWin}{'\n'}
+                        {'Total Trade: '}{totalTrade}{'\n'}
+                        {'Win Count: '}{winCount}{'\n'}
+                        {'Loss Count: '}{lossCount}{'\n'}
+                        {'Win: '}{win}{'\n'}
+                        {'Loss: '}{loss}
                     </Text>
                 </View>)
         }

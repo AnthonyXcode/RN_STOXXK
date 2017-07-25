@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import Metrix from '../../Themes/Metrix'
 
 export default StyleSheet.create({
     rowContainer: {
@@ -13,5 +14,12 @@ export default StyleSheet.create({
     inputText: {
         width: 200,
         alignSelf: 'center',
+    },
+    pageContainer: {
+        flex: 1
+    },
+    flatList: {
+        height: Metrix.height - Metrix.navigationBarHeight,
+        width: Metrix.width
     }
 })

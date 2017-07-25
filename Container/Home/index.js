@@ -17,19 +17,30 @@ import { StackNavigator } from 'react-navigation';
 import styles from './styles'
 import CheckData from '../Check'
 import CrossRsi from '../CorssRsi'
+import CrossMoving from '../CrossMoving'
+import KJD from '../KJD'
 import HomeItem from '../../Component/HomeItem'
 import * as firebase from 'firebase';
 
 const rowItem = [{ name: 'Check Data' }, { name: 'Cross RSI' }, { name: 'Cross Moving' }, { name: 'KDJ' }]
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDUInXBnBUXikaYaSX2TzqCI8KY4QZ1knw",
-    authDomain: "sharelocaton.firebaseapp.com",
-    databaseURL: "https://sharelocaton.firebaseio.com",
-    projectId: "sharelocaton",
-    storageBucket: "sharelocaton.appspot.com",
-    messagingSenderId: "947519844086"
+    apiKey: "AIzaSyDeDv08N8RnVXOwYtdV42QeuUjMJ8o9M8E",
+    authDomain: "stock-f3b2b.firebaseapp.com",
+    databaseURL: "https://stock-f3b2b.firebaseio.com",
+    projectId: "stock-f3b2b",
+    storageBucket: "stock-f3b2b.appspot.com",
+    messagingSenderId: "1076463827224"
 };
+
+// const firebaseConfig = {
+//     apiKey: "AIzaSyDUInXBnBUXikaYaSX2TzqCI8KY4QZ1knw",
+//     authDomain: "sharelocaton.firebaseapp.com",
+//     databaseURL: "https://sharelocaton.firebaseio.com",
+//     projectId: "sharelocaton",
+//     storageBucket: "sharelocaton.appspot.com",
+//     messagingSenderId: "947519844086"
+// };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
@@ -61,11 +72,11 @@ export default class HomeScreen extends Component {
                     const monthData = yearData[month]
                     for (var day in monthData) {
                         const dayData = monthData[day]
-                        const date = `${year}-${month}-${day.substring(0,2)}`
+                        const date = `${year}-${month}-${day.substring(0, 2)}`
                         const high = dayData.high
                         const open = dayData.open
                         const low = dayData.low
-                        const close = dayData.close 
+                        const close = dayData.close
                         let item = {
                             date, high, open, low, close
                         }
@@ -108,8 +119,16 @@ export default class HomeScreen extends Component {
             switch (name) {
                 case 'Check Data':
                     this.props.navigation.navigate('CheckData', { allData: this.state.allData, items: this.state.dataArray })
+                    break
                 case 'Cross RSI':
                     this.props.navigation.navigate('CrossRsi', { allData: this.state.allData, items: this.state.dataArray })
+                    break
+                case 'Cross Moving':
+                    this.props.navigation.navigate('CrossMoving', { allData: this.state.allData, items: this.state.dataArray })
+                    break
+                case 'KDJ':
+                    this.props.navigation.navigate('KJD', { allData: this.state.allData, items: this.state.dataArray })
+                    break
             }
         } else {
             Alert.alert('Data are still not ready!', null, [{ text: 'OK', onPress: () => console.log('OK Pressed') }], { cancelable: true })
@@ -120,7 +139,9 @@ export default class HomeScreen extends Component {
 const RN_Stock = StackNavigator({
     Home: { screen: HomeScreen },
     CheckData: { screen: CheckData },
-    CrossRsi: { screen: CrossRsi }
+    CrossRsi: { screen: CrossRsi },
+    CrossMoving: { screen: CrossMoving },
+    KJD: { screen: KJD }
 });
 
 AppRegistry.registerComponent('RN_Stock', () => RN_Stock);

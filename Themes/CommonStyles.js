@@ -5,6 +5,12 @@ const commonStyle = {
     },
     sellBackground: {
         backgroundColor: Colors.silver
+    },
+    chosenBackground: {
+        backgroundColor: Colors.orangeRed
+    },
+    regularBackground: {
+         backgroundColor: Colors.bgGrey
     }
 }
 export default commonStyle

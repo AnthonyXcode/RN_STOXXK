@@ -1,6 +1,6 @@
 const merge = require('ramda/src/merge')
 
-
+//=============================================Cross RSI======================================
 export const prepareRsiData = (inputItems, shortRsi, longRsi) => {
     const outputItems = []
 
@@ -92,3 +92,5 @@ countRsiItemForLong = (previousItem, item, outputPreviousItem, days) => {
     const output = { ...item, longRsi: rsi, raiseLongAverage: raiseAverage, dropLongAverage: dropAverage }
     return output
 }
+
+//=============================================Cross Moving======================================
