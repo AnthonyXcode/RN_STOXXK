@@ -16,7 +16,6 @@ export default StyleSheet.create({
         alignSelf: 'center',
     },
     pageContainer: {
-        flex: 1
     },
     flatList: {
         height: Metrix.height - Metrix.navigationBarHeight,

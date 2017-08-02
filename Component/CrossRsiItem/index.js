@@ -8,12 +8,14 @@ import styles from './styles'
 export default class CrossRsiItem extends Component {
     render() {
         const { date, longRsi, shortRsi, buy, sell, wOrL, validRsi } = this.props
-        let stateStyle={}
-        if (shortRsi > longRsi ){
-            stateStyle=styles.buyBackground
-        }
-        if (shortRsi  < longRsi){
-            stateStyle=styles.sellBackground
+        let stateStyle = {}
+        if (typeof shortRsi === 'number') {
+            if (shortRsi > longRsi) {
+                stateStyle = styles.buyBackground
+            }
+            if (shortRsi < longRsi) {
+                stateStyle = styles.sellBackground
+            }
         }
         return (
             <View style={[styles.container, stateStyle]}>

@@ -12,6 +12,7 @@ import { StackNavigator } from 'react-navigation';
 import CrossMAItme from '../../Component/CrossMAItme'
 import styles from './styles'
 import { prepareRsiData } from '../../Helper/CalculateHelper'
+import ControllerToggle from '../../Component/ControllerToggle'
 
 const sortBy = require('ramda/src/sortBy')
 const prop = require('ramda/src/prop')
@@ -46,26 +47,25 @@ export default class CrossRsi extends Component {
     render() {
         return (
             <View>
-                {this.renderController()}
+                <ControllerToggle
+                    showData={this.state.showData}
+                    toggleContent={this.showContent}
+                    toggleController={this.showController} />
                 {this.renderContent()}
             </View>
         )
     }
 
-    renderController = () => {
-        const dataButtonStyle = this.state.showData ? styles.chosenButton : styles.regularButton
-        const controllerStyle = this.state.showData ? styles.regularButton : styles.chosenButton
-        return (
-            <View style={styles.controllerContainer}>
-                    <Text style={dataButtonStyle} onPress={() => { !this.state.showData && this.setState({ showData: true }) }}>Data</Text>
-                    <Text style={controllerStyle} onPress={() => { this.state.showData && this.setState({ showData: false }) }}>Controller</Text>
-            </View>
-        )
+    showContent = () => {
+        this.setState({ showData: true })
+    }
+
+    showController = () => {
+        this.setState({ showData: false })
     }
 
     renderContent = () => {
         const outputItems = this.prepareData()
-        console.log(this.state.showData)
         return (
             <View>
                 {
@@ -226,11 +226,11 @@ export default class CrossRsi extends Component {
 
             if (buyOnhand != 0) {
                 if (i >= laquidationDay) {
-                        wOrL = item.close - buyOnhand
-                        sell = item.close
-                        this.getStatistic(wOrL)
-                        buyOnhand = 0
-                        laquidationDay = 0
+                    wOrL = item.close - buyOnhand
+                    sell = item.close
+                    this.getStatistic(wOrL)
+                    buyOnhand = 0
+                    laquidationDay = 0
                 } else if (item.close - buyOnhand > this.state.cutWinValue || buyOnhand - item.close > this.state.cutlossValue) {
                     wOrL = item.close - buyOnhand
                     sell = item.close
@@ -250,7 +250,7 @@ export default class CrossRsi extends Component {
                     this.getStatistic(wOrL)
                     sellOnhand = 0
                     laquidationDay = 0
-                } else if (sellOnhand - item.close > this.state.cutWinValue || item.close - sellOnhand > this.state.cutlossValue){
+                } else if (sellOnhand - item.close > this.state.cutWinValue || item.close - sellOnhand > this.state.cutlossValue) {
                     wOrL = sellOnhand - item.close
                     buy = item.close
                     this.getStatistic(wOrL)

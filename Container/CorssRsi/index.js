@@ -9,12 +9,11 @@ import {
     Keyboard
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import ViewPager from 'react-native-viewpager'
 import styles from './styles'
 import CrossRsiItem from '../../Component/CrossRsiItem'
+import ControllerToggle from '../../Component/ControllerToggle'
 import { prepareRsiData } from '../../Helper/CalculateHelper'
 
-const Pages = ['1', '2', '3']
 const sortBy = require('ramda/src/sortBy')
 const prop = require('ramda/src/prop')
 const reverse = require('ramda/src/reverse')
@@ -30,14 +29,13 @@ let loss = 0
 export default class CrossRsi extends Component {
     constructor(props) {
         super(props)
-        const ds = new ViewPager.DataSource({ pageHasChanged: (r1, r2) => r1 !== r2 })
         this.state = {
-            dataSource: ds.cloneWithPages(Pages),
             shortRsi: 7,
             longRsi: 25,
             validRsi: 5,
             validDays: 6,
-            cutlossValue: 400
+            cutlossValue: 400,
+            showData: true
         }
     }
     static navigationOptions = {
@@ -46,88 +44,97 @@ export default class CrossRsi extends Component {
 
     render() {
         items = reverse(this.preparaData())
+        
+        return (
+            // <View style={styles.pageContainer}>
+            //     <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} />
+            //     <FlatList
+            //         data={items}
+            //         renderItem={({ item, index }) => this.renderListItem(item, index)}
+            //         keyExtractor={(item, index) => index}
+            //     />
+            // </View>
+            <View>
+                <ControllerToggle showData={this.state.showData} toggleContent={this.showContent} toggleController={this.showController} />
+                {this.state.showData ? this.renderContent() : this.renderController()}
+            </View>
+        )
+    }
+
+    showContent = () => {
+        this.setState({ showData: true })
+    }
+
+    showController = () => {
+        this.setState({ showData: false })
+    }
+
+    renderContent = () => {
+        const items = reverse(this.preparaData())
         return (
             <View style={styles.pageContainer}>
-                <ViewPager
-                    dataSource={this.state.dataSource}
-                    renderPage={(item, index) => this.renderPage(item, index)}
-                    isLoop={false}
-                    autoPlay={false}
+                <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} />
+                <FlatList
+                    data={items}
+                    renderItem={({ item, index }) => this.renderListItem(item, index)}
+                    keyExtractor={(item, index) => index}
                 />
             </View>
         )
     }
 
-    renderPage = (item, index) => {
-        if (index == 0) {
-            return (<View style={styles.pageContainer}>
-                <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} />
-                <View style={styles.flatList}>
-                    <FlatList
-                        data={items}
-                        renderItem={({ item, index }) => this.renderListItem(item, index)}
-                        keyExtractor={(item, index) => index}
-                    />
-                </View>
-            </View>)
-        } else if (index == 1) {
-            return (
-                <TouchableHighlight onPress={Keyboard.dismiss} style={styles.pageContainer}>
-                    <View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Long Rsi: </Text>
-                            <TextInput
-                                defaultValue={this.state.longRsi.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.longRsi.toString()}
-                                onChangeText={(text) => {
-                                    !!text && this.setState({ longRsi: parseInt(text) })
-                                }}
-                            />
-                        </View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Short Rsi: </Text>
-                            <TextInput
-                                defaultValue={this.state.shortRsi.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.shortRsi.toString()}
-                                onChangeText={(text) => {
-                                    !!text && this.setState({ shortRsi: parseInt(text) })
-                                }}
-                            />
-                        </View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Valid Rsi: </Text>
-                            <TextInput
-                                defaultValue={this.state.validRsi.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.validRsi.toString()}
-                                onChangeText={(text) => {
-                                    !!text && this.setState({ validRsi: parseInt(text) })
-                                }}
-                            />
-                        </View>
-                        <View style={styles.rowContainer}>
-                            <Text style={styles.text}>Valid Days: </Text>
-                            <TextInput
-                                defaultValue={this.state.validDays.toString()}
-                                keyboardType='number-pad'
-                                style={styles.inputText}
-                                placeholder={this.state.validDays.toString()}
-                                onChangeText={(text) => {
-                                    text && this.setState({ validDays: parseInt(text) })
-                                }}
-                            />
-                        </View>
+    renderController = () => {
+        return (
+            <TouchableHighlight onPress={Keyboard.dismiss} style={styles.pageContainer}>
+                <View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Long Rsi: </Text>
+                        <TextInput
+                            defaultValue={this.state.longRsi.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.longRsi.toString()}
+                            onChangeText={(text) => {
+                                !!text && this.setState({ longRsi: parseInt(text) })
+                            }}
+                        />
                     </View>
-                </TouchableHighlight>
-            )
-        } else {
-            return (
-                <View style={styles.pageContainer}>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Short Rsi: </Text>
+                        <TextInput
+                            defaultValue={this.state.shortRsi.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.shortRsi.toString()}
+                            onChangeText={(text) => {
+                                !!text && this.setState({ shortRsi: parseInt(text) })
+                            }}
+                        />
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Valid Rsi: </Text>
+                        <TextInput
+                            defaultValue={this.state.validRsi.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.validRsi.toString()}
+                            onChangeText={(text) => {
+                                !!text && this.setState({ validRsi: parseInt(text) })
+                            }}
+                        />
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.text}>Valid Days: </Text>
+                        <TextInput
+                            defaultValue={this.state.validDays.toString()}
+                            keyboardType='number-pad'
+                            style={styles.inputText}
+                            placeholder={this.state.validDays.toString()}
+                            onChangeText={(text) => {
+                                text && this.setState({ validDays: parseInt(text) })
+                            }}
+                        />
+                    </View>
                     <Text>
                         {'Total Win: '}{totalWin}{'\n'}
                         {'Total Trade: '}{totalTrade}{'\n'}
@@ -136,8 +143,9 @@ export default class CrossRsi extends Component {
                         {'Win: '}{win}{'\n'}
                         {'Loss: '}{loss}
                     </Text>
-                </View>)
-        }
+                </View>
+            </TouchableHighlight>
+        )
     }
 
     renderListItem = (item, index) => {

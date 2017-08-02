@@ -7,7 +7,8 @@ export default StyleSheet.create({
     container: {
         flexDirection: 'row',
         height: 30,
-        width: Metrix.width
+        width: Metrix.width,
+        alignItems: 'center'
     },
     date: {
         flex: 1.7
