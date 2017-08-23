@@ -44,16 +44,7 @@ export default class CrossRsi extends Component {
 
     render() {
         items = reverse(this.preparaData())
-        
         return (
-            // <View style={styles.pageContainer}>
-            //     <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} />
-            //     <FlatList
-            //         data={items}
-            //         renderItem={({ item, index }) => this.renderListItem(item, index)}
-            //         keyExtractor={(item, index) => index}
-            //     />
-            // </View>
             <View>
                 <ControllerToggle showData={this.state.showData} toggleContent={this.showContent} toggleController={this.showController} />
                 {this.state.showData ? this.renderContent() : this.renderController()}
@@ -78,6 +69,7 @@ export default class CrossRsi extends Component {
                     data={items}
                     renderItem={({ item, index }) => this.renderListItem(item, index)}
                     keyExtractor={(item, index) => index}
+                    style={styles.flatList}
                 />
             </View>
         )

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import CommonStyles from '../../Themes/CommonStyles'
+import Metrix from '../../Themes/Metrix'
 
 export default StyleSheet.create({
     rowContainer: {
@@ -14,5 +15,8 @@ export default StyleSheet.create({
     inputText: {
         width: 200,
         alignSelf: 'center',
+    },
+    contentContainer: {
+        height: Metrix.height - Metrix.controllerHeight
     }
 })

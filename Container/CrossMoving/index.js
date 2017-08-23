@@ -67,7 +67,7 @@ export default class CrossRsi extends Component {
     renderContent = () => {
         const outputItems = this.prepareData()
         return (
-            <View>
+            <View style={styles.contentContainer}>
                 {
                     this.state.showData &&
                     <View>

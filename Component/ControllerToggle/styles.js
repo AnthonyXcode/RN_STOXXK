@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native'
 import CommonStyles from '../../Themes/CommonStyles'
+import Metrix from '../../Themes/Metrix'
 
 export default StyleSheet.create({
     controllerContainer: {
         flexDirection: 'row',
-        height: 30,
+        height: Metrix.controllerHeight,
         justifyContent: 'center',
         alignItems: 'center'
     },

@@ -7,7 +7,6 @@ import styles from './styles'
 
 export default class ControllerToggle extends Component {
     render() {
-        console.log('toggleContent', this.props.toggleContent)
         const dataButtonStyle = this.props.showData ? styles.chosenButton : styles.regularButton
         const controllerStyle = this.props.showData ? styles.regularButton : styles.chosenButton
         return (

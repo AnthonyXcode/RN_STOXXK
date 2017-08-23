@@ -6,7 +6,7 @@ export default StyleSheet.create({
     ...CommonStyles,
     container: {
         flexDirection: 'row',
-        height: 30,
+        height: Metrix.controllerHeight,
         width: Metrix.width,
         alignItems: 'center'
     },

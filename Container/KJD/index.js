@@ -53,24 +53,6 @@ export default class KJD extends Component {
     renderIOS() {
         return (
             <View style={{ flex: 1, backgroundColor: 'red' }}>
-                <ScrollView
-                    contentOffset={{
-                        x: Dimensions.width,
-                        y: 0
-                    }}
-                    horizontal
-                    pagingEnabled
-                    bounces
-                    scrollsToTop
-                    scrollEventThrottle={100}
-                    removeClippedSubviews
-                    directionalLockEnabled
-                    onScroll={this.handleHorizontalScroll}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                >
-                    {this.renderContent()}
-                </ScrollView>
             </View>
         )
     }
