@@ -21,6 +21,7 @@ import CrossMoving from '../CrossMoving'
 import KJD from '../KJD'
 import HomeItem from '../../Component/HomeItem'
 import * as firebase from 'firebase';
+import OneSignal from 'react-native-onesignal'
 
 const rowItem = [{ name: 'Check Data' }, { name: 'Cross RSI' }, { name: 'Cross Moving' }, { name: 'KDJ' }]
 
@@ -60,6 +61,39 @@ export default class HomeScreen extends Component {
         title: 'Home',
     }
 
+    componentWillMount() {
+        OneSignal.addEventListener('received', this.onReceived);
+        OneSignal.addEventListener('opened', this.onOpened);
+        OneSignal.addEventListener('registered', this.onRegistered);
+        OneSignal.addEventListener('ids', this.onIds);
+    }
+
+    componentWillUnmount() {
+        OneSignal.removeEventListener('received', this.onReceived);
+        OneSignal.removeEventListener('opened', this.onOpened);
+        OneSignal.removeEventListener('registered', this.onRegistered);
+        OneSignal.removeEventListener('ids', this.onIds);
+    }
+
+    onReceived(notification) {
+        console.log("Notification received: ", notification);
+    }
+
+    onRegistered(notifData) {
+        console.log("Device had been registered for push notifications!", notifData);
+    }
+
+    onIds(device) {
+        console.log('Device info: ', device);
+    }
+
+    onOpened(openResult) {
+        console.log('Message: ', openResult.notification.payload.body);
+        console.log('Data: ', openResult.notification.payload.additionalData);
+        console.log('isActive: ', openResult.notification.isAppInFocus);
+        console.log('openResult: ', openResult);
+    }
+
     componentDidMount() {
         if (this.state.dataReady) return
         console.log('componentDidMount')
@@ -92,6 +126,12 @@ export default class HomeScreen extends Component {
                 dataReady: true
             })
         })
+        permissions = {
+            alert: true,
+            badge: true,
+            sound: true
+        }
+        OneSignal.requestPermissions(permissions)
     }
 
     render() {
