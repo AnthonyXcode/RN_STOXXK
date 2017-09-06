@@ -70,14 +70,13 @@ export default class CrossRsi extends Component {
             <View style={styles.contentContainer}>
                 {
                     this.state.showData &&
-                    <View>
                         <CrossMAItme date={'Data'} longMA={'Long'} middleMA={'Middle'} shortMA={'Short'} buy={'Buy'} sell={'Sell'} wOrL={'wOrL'} />
                         <FlatList
                             data={outputItems}
                             renderItem={({ item, index }) => this.renderListItem(item, index)}
                             keyExtractor={(item, index) => index}
+                            removeClippedSubviews={true}
                         />
-                    </View>
                 }
                 {!this.state.showData && this.renderInputText()}
             </View>

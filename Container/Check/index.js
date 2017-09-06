@@ -53,6 +53,7 @@ export default class CheckData extends Component {
                         keyExtractor={(item, index) => index}
                         renderItem={({ item, index }) => this.renderRow(item, index)}
                         initialScrollIndex={items.lenght}
+                        removeClippedSubviews={true}
                     />
                 </View>
             )

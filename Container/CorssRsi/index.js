@@ -43,7 +43,6 @@ export default class CrossRsi extends Component {
     }
 
     render() {
-        items = reverse(this.preparaData())
         return (
             <View>
                 <ControllerToggle showData={this.state.showData} toggleContent={this.showContent} toggleController={this.showController} />
@@ -70,6 +69,7 @@ export default class CrossRsi extends Component {
                     renderItem={({ item, index }) => this.renderListItem(item, index)}
                     keyExtractor={(item, index) => index}
                     style={styles.flatList}
+                    removeClippedSubviews={true}
                 />
             </View>
         )
