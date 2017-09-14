@@ -96,12 +96,12 @@ export default class HomeScreen extends Component {
 
     componentDidMount() {
         if (this.state.dataReady) return
-        console.log('componentDidMount')
         var database = firebaseApp.database().ref('Date Data')
         var data = {}
         var items = []
         var oneString = database.on('value', (snapShot) => {
             data = snapShot.val()
+            items = []
             for (var year in data) {
                 const yearData = data[year]
                 for (var month in yearData) {
