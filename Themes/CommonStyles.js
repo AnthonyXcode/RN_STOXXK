@@ -7,10 +7,10 @@ const commonStyle = {
         backgroundColor: Colors.silver
     },
     chosenBackground: {
-        backgroundColor: Colors.orangeRed
+        backgroundColor: Colors.darkSkyBlue2
     },
     regularBackground: {
-         backgroundColor: Colors.bgGrey
+         backgroundColor: Colors.white
     }
 }
 export default commonStyle

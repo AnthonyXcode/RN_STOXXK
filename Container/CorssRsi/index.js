@@ -63,7 +63,7 @@ export default class CrossRsi extends Component {
         const items = reverse(this.preparaData())
         return (
             <View style={styles.pageContainer}>
-                <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} />
+                <CrossRsiItem date={'Date'} longRsi={'Long'} shortRsi={'Short'} validRsi={this.state.validRsi} sell={'Sell'} buy={'Buy'} wOrL={'Win'}/>
                 <FlatList
                     data={items}
                     renderItem={({ item, index }) => this.renderListItem(item, index)}

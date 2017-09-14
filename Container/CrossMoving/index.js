@@ -71,7 +71,7 @@ export default class CrossRsi extends Component {
                 {
                     this.state.showData &&
                     <View>
-                        <CrossMAItme date={'Data'} longMA={'Long'} middleMA={'Middle'} shortMA={'Short'} buy={'Buy'} sell={'Sell'} wOrL={'wOrL'} />
+                        <CrossMAItme date={'Data'} longMA={'Long'} middleMA={'Middle'} shortMA={'Short'} buy={'Buy'} sell={'Sell'} wOrL={'Win'} />
                         <FlatList
                             data={outputItems}
                             renderItem={({ item, index }) => this.renderListItem(item, index)}
