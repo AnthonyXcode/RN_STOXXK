@@ -22,8 +22,9 @@ import KJD from '../KJD'
 import HomeItem from '../../Component/HomeItem'
 import * as firebase from 'firebase';
 import OneSignal from 'react-native-onesignal'
+import i18n from '../../Helper/Language'
 
-const rowItem = [{ name: 'Check Data' }, { name: 'Cross RSI' }, { name: 'Cross Moving' }, { name: 'KDJ' }]
+const rowItem = [{ name: i18n.t('checkData') }, { name: i18n.t('strategyOne') }, { name: i18n.t('strategyTwo') }, { name: 'KDJ' }]
 
 const firebaseConfig = {
     apiKey: "AIzaSyDeDv08N8RnVXOwYtdV42QeuUjMJ8o9M8E",
@@ -159,13 +160,13 @@ export default class HomeScreen extends Component {
     onItemPress = (name) => {
         if (this.state.dataReady) {
             switch (name) {
-                case 'Check Data':
+                case i18n.t('checkData'):
                     this.props.navigation.navigate('CheckData', { allData: this.state.allData, items: this.state.dataArray })
                     break
-                case 'Cross RSI':
+                case i18n.t('strategyOne'):
                     this.props.navigation.navigate('CrossRsi', { allData: this.state.allData, items: this.state.dataArray })
                     break
-                case 'Cross Moving':
+                case i18n.t('strategyTwo'):
                     this.props.navigation.navigate('CrossMoving', { allData: this.state.allData, items: this.state.dataArray })
                     break
                 case 'KDJ':
