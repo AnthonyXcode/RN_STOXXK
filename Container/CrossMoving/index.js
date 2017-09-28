@@ -77,6 +77,7 @@ export default class CrossRsi extends Component {
                             renderItem={({ item, index }) => this.renderListItem(item, index)}
                             keyExtractor={(item, index) => index}
                             removeClippedSubviews={true}
+                            initialNumToRender={30}
                         />
                     </View>
                 }

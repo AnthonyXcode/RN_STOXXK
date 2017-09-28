@@ -54,6 +54,7 @@ export default class CheckData extends Component {
                         renderItem={({ item, index }) => this.renderRow(item, index)}
                         initialScrollIndex={items.lenght}
                         removeClippedSubviews={true}
+                        initialNumToRender={30}
                     />
                 </View>
             )
