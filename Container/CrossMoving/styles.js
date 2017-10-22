@@ -18,5 +18,8 @@ export default StyleSheet.create({
     },
     contentContainer: {
         height: Metrix.height - Metrix.controllerHeight
+    },
+    dataContainer: {
+        paddingHorizontal: 10
     }
 })

@@ -6,22 +6,25 @@ import Colors from '../../Themes/Colors'
 export default StyleSheet.create({
     controllerContainer: {
         flexDirection: 'row',
-        height: Metrix.controllerHeight,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
+        paddingVertical: 5
+    },
+    button: {
+        flex: 1,
+        height: 30,        
     },
     chosenButton: {
         ...CommonStyles.chosenBackground,
         flex: 1,        
-        height: 30,
         justifyContent: 'center',
         alignItems: 'center',
     },
     regularButton: {
         ...CommonStyles.regularBackground,
         flex: 1,
-        height: 30,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -41,5 +44,11 @@ export default StyleSheet.create({
         flex: 1,  
         lineHeight: 30,
         textAlign: 'center',        
+    },
+    chosenText: {
+        color: Colors.white
+    },
+    regularText: {
+        color: Colors.black1
     }
 })

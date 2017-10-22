@@ -16,10 +16,13 @@ export default StyleSheet.create({
         alignSelf: 'center',
     },
     pageContainer: {
-        height: Metrix.height - Metrix.controllerHeight - Metrix.navigationBarHeight
+        height: Metrix.height - Metrix.controllerHeight - Metrix.navigationBarHeight,
     },
     flatList: {
         height: Metrix.height,
         width: Metrix.width
+    },
+    dataContainer: {
+        paddingHorizontal: 10
     }
 })

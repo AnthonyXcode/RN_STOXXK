@@ -4,6 +4,7 @@ import {
     View
 } from 'react-native';
 import styles from './styles'
+import Constant from '../../Helper/Constant'
 
 export default class CrossRsiItem extends Component {
     render() {
@@ -20,8 +21,8 @@ export default class CrossRsiItem extends Component {
         return (
             <View style={[styles.container, stateStyle]}>
                 <Text style={styles.date}>{date}</Text>
-                <Text style={styles.data}>{longRsi}</Text>
-                <Text style={styles.data}>{shortRsi}</Text>
+                {Constant.appConfig.isAdmin ? <Text style={styles.data}>{longRsi}</Text> :  null}
+                {Constant.appConfig.isAdmin ? <Text style={styles.data}>{shortRsi}</Text> : null}
                 <Text style={styles.data}>{buy}</Text>
                 <Text style={styles.data}>{sell}</Text>
                 <Text style={styles.data}>{wOrL}</Text>

@@ -13,6 +13,9 @@ import CrossMAItme from '../../Component/CrossMAItme'
 import styles from './styles'
 import { prepareRsiData } from '../../Helper/CalculateHelper'
 import ControllerToggle from '../../Component/ControllerToggle'
+import Constant from '../../Helper/Constant'
+import InputField from '../../Component/InputField'
+import i18n from '../../Helper/Language'
 
 const sortBy = require('ramda/src/sortBy')
 const prop = require('ramda/src/prop')
@@ -41,7 +44,7 @@ export default class CrossRsi extends Component {
     }
 
     static navigationOptions = {
-        title: 'Cross Moving'
+        title: i18n.t('strategyTwo')
     }
 
     render() {
@@ -71,7 +74,7 @@ export default class CrossRsi extends Component {
                 {
                     this.state.showData &&
                     <View>
-                        <CrossMAItme date={'Data'} longMA={'Long'} middleMA={'Middle'} shortMA={'Short'} buy={'Buy'} sell={'Sell'} wOrL={'Win'} />
+                        <CrossMAItme date={i18n.t('date')} longMA={'Long'} middleMA={'Middle'} shortMA={'Short'} buy={i18n.t('buy')} sell={i18n.t('sell')} wOrL={i18n.t('wOrL')} />
                         <FlatList
                             data={outputItems}
                             renderItem={({ item, index }) => this.renderListItem(item, index)}
@@ -88,87 +91,66 @@ export default class CrossRsi extends Component {
 
     renderInputText = () => {
         return (
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={styles.pageContainer}>
-                <View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Short Moving: </Text>
-                        <TextInput
-                            defaultValue={this.state.shortMoving.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.shortMoving.toString()}
-                            onChangeText={(text) => {
-                                !!text && this.setState({ shortMoving: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Middle Moving: </Text>
-                        <TextInput
-                            defaultValue={this.state.middleMoving.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.middleMoving.toString()}
-                            onChangeText={(text) => {
-                                !!text && parseInt(text) > this.state.shortMoving && this.setState({ middleMoving: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Long Moving: </Text>
-                        <TextInput
-                            defaultValue={this.state.longMoving.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.longMoving.toString()}
-                            onChangeText={(text) => {
-                                !!text && parseInt(text) > this.state.middleMoving && this.setState({ longMoving: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Valid Days: </Text>
-                        <TextInput
-                            defaultValue={this.state.validDays.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.validDays.toString()}
-                            onChangeText={(text) => {
-                                text && this.setState({ validDays: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Cut Loss Value: </Text>
-                        <TextInput
-                            defaultValue={this.state.cutlossValue.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.cutlossValue.toString()}
-                            onChangeText={(text) => {
-                                text && this.setState({ cutlossValue: parseInt(text) })
-                            }}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.text}>Cut Win Value: </Text>
-                        <TextInput
-                            defaultValue={this.state.cutWinValue.toString()}
-                            keyboardType='number-pad'
-                            style={styles.inputText}
-                            placeholder={this.state.cutWinValue.toString()}
-                            onChangeText={(text) => {
-                                text && this.setState({ cutWinValue: parseInt(text) })
-                            }}
-                        />
-                    </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.dataContainer}>
+                    {Constant.appConfig.isAdmin ?
+                        <View>
+                            <InputField
+                                title={'Short Moving: '}
+                                defaultValue={this.state.shortMoving.toString()}
+                                placeholder={this.state.shortMoving.toString()}
+                                onChangeText={(text) => {
+                                    !!text && this.setState({ shortMoving: parseInt(text) })
+                                }}
+                            />
+                            <InputField
+                                title={'Middle Moving: '}
+                                defaultValue={this.state.middleMoving.toString()}
+                                placeholder={this.state.middleMoving.toString()}
+                                onChangeText={(text) => {
+                                    !!text && parseInt(text) > this.state.shortMoving && this.setState({ middleMoving: parseInt(text) })
+                                }}
+                            />
+                            <InputField
+                                title={'Long Moving: '}
+                                defaultValue={this.state.longMoving.toString()}
+                                placeholder={this.state.longMoving.toString()}
+                                onChangeText={(text) => {
+                                    !!text && parseInt(text) > this.state.middleMoving && this.setState({ longMoving: parseInt(text) })
+                                }}
+                            />
+                            <InputField
+                                title={'Valid Days: '}
+                                defaultValue={this.state.validDays.toString()}
+                                placeholder={this.state.validDays.toString()}
+                                onChangeText={(text) => {
+                                    text && this.setState({ validDays: parseInt(text) })
+                                }}
+                            />
+                            <InputField
+                                title={'Cut Loss Value: '}
+                                defaultValue={this.state.cutlossValue.toString()}
+                                placeholder={this.state.cutlossValue.toString()}
+                                onChangeText={(text) => {
+                                    text && this.setState({ cutlossValue: parseInt(text) })
+                                }}
+                            />
+                            <InputField
+                                title={'Cut Win Value: '}
+                                defaultValue={this.state.cutWinValue.toString()}
+                                placeholder={this.state.cutWinValue.toString()}
+                                onChangeText={(text) => {
+                                    text && this.setState({ cutWinValue: parseInt(text) })
+                                }}
+                            />
+                        </View> : null}
                     <Text>
-                        {'Total Win: '}{totalWin}
-                        {'\nTotal trade: '}{totalTrade}
-                        {'\nWin Count: '}{winCount}
-                        {'\nLoss Count: '}{lossCount}
-                        {'\nWin Value: '}{win}
-                        {'\nLoss Value: '}{loss}</Text>
+                        {i18n.t('totalWin')}{totalWin}{'\n'}
+                        {i18n.t('totalTrade')}{totalTrade}{'\n'}
+                        {i18n.t('winCount')}{winCount}{'\n'}
+                        {i18n.t('lossCount')}{lossCount}{'\n'}
+                        {i18n.t('win')}{win}{'\n'}
+                        {i18n.t('loss')}{loss}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )

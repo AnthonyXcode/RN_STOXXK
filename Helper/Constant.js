@@ -1,5 +1,5 @@
 const appConfig = {
-    isAdmin: false
+    isAdmin: true
 }
 
 export default {

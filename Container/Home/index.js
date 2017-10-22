@@ -18,13 +18,14 @@ import styles from './styles'
 import CheckData from '../Check'
 import CrossRsi from '../CorssRsi'
 import CrossMoving from '../CrossMoving'
+import DMI from '../DMI'
 import KJD from '../KJD'
 import HomeItem from '../../Component/HomeItem'
-import * as firebase from 'firebase';
+import * as firebase from 'firebase'
 import OneSignal from 'react-native-onesignal'
 import i18n from '../../Helper/Language'
 
-const rowItem = [{ name: i18n.t('checkData') }, { name: i18n.t('strategyOne') }, { name: i18n.t('strategyTwo') }, { name: 'KDJ' }]
+const rowItem = [{ name: i18n.t('checkData') }, { name: i18n.t('strategyOne') }, { name: i18n.t('strategyTwo') }, { name: 'DMI'}]
 
 const firebaseConfig = {
     apiKey: "AIzaSyDeDv08N8RnVXOwYtdV42QeuUjMJ8o9M8E",
@@ -46,7 +47,6 @@ const firebaseConfig = {
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-
 export default class HomeScreen extends Component {
 
     constructor(props) {
@@ -59,7 +59,7 @@ export default class HomeScreen extends Component {
     }
 
     static navigationOptions = {
-        title: 'Home',
+        title: i18n.t('home')
     }
 
     componentWillMount() {
@@ -136,7 +136,7 @@ export default class HomeScreen extends Component {
     }
 
     render() {
-        const signal = this.state.dataReady ? 'Data is ready!' : 'Preparing data!'
+        const signal = this.state.dataReady ? i18n.t('dataReady') : i18n.t('preparingData')
         return (
             <View>
                 <FlatList
@@ -169,12 +169,12 @@ export default class HomeScreen extends Component {
                 case i18n.t('strategyTwo'):
                     this.props.navigation.navigate('CrossMoving', { allData: this.state.allData, items: this.state.dataArray })
                     break
-                case 'KDJ':
-                    this.props.navigation.navigate('KJD', { allData: this.state.allData, items: this.state.dataArray })
+                case 'DMI':
+                    this.props.navigation.navigate('DMI', { allData: this.state.allData, items: this.state.dataArray })
                     break
             }
         } else {
-            Alert.alert('Data are still not ready!', null, [{ text: 'OK', onPress: () => console.log('OK Pressed') }], { cancelable: true })
+            Alert.alert(i18n.t('dataAreStillNotReady'), null, [{ text: 'OK', onPress: () => console.log('OK Pressed') }], { cancelable: true })
         }
     }
 }
@@ -184,7 +184,7 @@ const RN_Stock = StackNavigator({
     CheckData: { screen: CheckData },
     CrossRsi: { screen: CrossRsi },
     CrossMoving: { screen: CrossMoving },
-    KJD: { screen: KJD }
+    DMI: { screen: DMI }
 });
 
 AppRegistry.registerComponent('RN_Stock', () => RN_Stock);
