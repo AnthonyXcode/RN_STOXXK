@@ -144,10 +144,7 @@ export default class DMI extends Component {
             if (i < 1) {
                 outputItems.push(inputItems[i])
             } else {
-                const range = inputItems[i].high - inputItems[i].low
-                const absHC = Math.abs(inputItems[i].high - inputItems[i - 1].close)
-                const absCL = Math.abs(inputItems[i - 1].close - inputItems[i].low)
-                const TR = Math.max(range, absHC, absCL)
+                const TR = Math.max(inputItems[i].high, inputItems[i-1].close) - Math.min(inputItems[i].low, inputItems[i-1].close)
                 if (i < averageDay) {
                     outputItems.push({ ...inputItems[i], TR })
                 } else if (i === averageDay) {
@@ -156,10 +153,10 @@ export default class DMI extends Component {
                         sum += outputItems[j].TR
                     }
                     const ATR = sum / averageDay
-                    outputItems.push({ ...inputItems[i], ATR, TR })
+                    outputItems.push({ ...inputItems[i], ATR })
                 } else {
                     const ATR = outputItems[i - 1].ATR * (averageDay - 1) / averageDay + TR / averageDay
-                    outputItems.push({ ...inputItems[i], ATR, TR })
+                    outputItems.push({ ...inputItems[i], ATR })
                 }
             }
         }
@@ -190,40 +187,30 @@ export default class DMI extends Component {
                 let truePstDM = 0
                 let trueNgtDM = 0
 
-                if (positiveDM > negativeDM && positiveDM > 0){
+                if (positiveDM > negativeDM && positiveDM > 0) {
                     truePstDM = positiveDM
                 }
 
-                if (positiveDM < negativeDM && negativeDM > 0){
+                if (positiveDM < negativeDM && negativeDM > 0) {
                     trueNgtDM = negativeDM
                 }
 
                 if (i < averageDay) {
-                    outputItems.push({ ...inputItems[i], positiveDM, negativeDM, trueNgtDM, truePstDM })
+                    outputItems.push({ ...inputItems[i], trueNgtDM, truePstDM })
                 } else if (i === averageDay) {
-                    let sumPositiveDM = positiveDM
-                    let sumNegationDM = negativeDM
                     let sumTruePstDM = truePstDM
                     let sumTrueNgtDM = trueNgtDM
-                    let count = 0
                     for (var j = 1; j < outputItems.length; j++) {
-                        sumPositiveDM += outputItems[j].positiveDM
-                        sumNegationDM += outputItems[j].negativeDM
                         sumTruePstDM += outputItems[j].truePstDM
                         sumTrueNgtDM += outputItems[j].trueNgtDM
-                        count += 1
                     }
-                    const AvgPstDM = sumPositiveDM / averageDay
-                    const AvgNgtDM = sumNegationDM / averageDay
                     const AvgTruePstDM = sumTruePstDM / averageDay
                     const AvgTrueNgtDM = sumTrueNgtDM / averageDay
-                    outputItems.push({ ...inputItems[i], positiveDM, negativeDM, truePstDM, trueNgtDM, AvgPstDM, AvgNgtDM, AvgTruePstDM, AvgTrueNgtDM })
+                    outputItems.push({ ...inputItems[i], AvgTruePstDM, AvgTrueNgtDM })
                 } else {
-                    const AvgPstDM = outputItems[i - 1].AvgTruePstDM * (averageDay - 1) / averageDay + positiveDM / averageDay
-                    const AvgNgtDM = outputItems[i - 1].AvgTrueNgtDM * (averageDay - 1) / averageDay + negativeDM / averageDay
                     const AvgTruePstDM = outputItems[i - 1].AvgTruePstDM * (averageDay - 1) / averageDay + truePstDM / averageDay
-                    const AvgTrueNgtDM = outputItems[i - 1].AvgTrueNgtDM * (averageDay - 1) / averageDay + trueNgtDM / averageDay                    
-                    outputItems.push({ ...inputItems[i], positiveDM, negativeDM, truePstDM, trueNgtDM, AvgPstDM, AvgNgtDM, AvgTruePstDM, AvgTrueNgtDM })
+                    const AvgTrueNgtDM = outputItems[i - 1].AvgTrueNgtDM * (averageDay - 1) / averageDay + trueNgtDM / averageDay
+                    outputItems.push({ ...inputItems[i], AvgTruePstDM, AvgTrueNgtDM })
                 }
             }
         }
@@ -237,12 +224,12 @@ export default class DMI extends Component {
     insertDI = (inputItems, averageDay) => {
         const outputItems = []
         for (var i = 0; i < inputItems.length; i++) {
-            const AvgPstDM = prop(['AvgPstDM'], inputItems[i])
-            const AvgNgtDM = prop(['AvgNgtDM'], inputItems[i])
-            const ATR = prop(['ATR'], inputItems[i])
-            if (AvgPstDM && AvgNgtDM && ATR) {
-                const AvgPstDI = AvgPstDM / ATR * 100
-                const AvgNgtDI = AvgNgtDM / ATR * 100
+            const AvgTruePstDM = inputItems[i].AvgTruePstDM
+            const AvgTrueNgtDM = inputItems[i].AvgTrueNgtDM
+            const ATR = inputItems[i].ATR
+            if (AvgTruePstDM && AvgTrueNgtDM && ATR) {
+                const AvgPstDI = AvgTruePstDM / ATR * 100
+                const AvgNgtDI = AvgTrueNgtDM / ATR * 100
                 outputItems.push({ ...inputItems[i], AvgPstDI, AvgNgtDI })
             } else {
                 outputItems.push(inputItems[i])
@@ -265,21 +252,21 @@ export default class DMI extends Component {
             if (i < averageDay) {
                 outputItems.push(inputItems[i])
             } else {
-                const AvgPstDI = prop(['AvgPstDI'], inputItems[i])
-                const AvgNgtDI = prop(['AvgNgtDI'], inputItems[i])
+                const AvgPstDI = inputItems[i].AvgPstDI
+                const AvgNgtDI = inputItems[i].AvgNgtDI
                 const DX = Math.abs(AvgPstDI - AvgNgtDI) / (AvgPstDI + AvgNgtDI) * 100
                 if (i < 2 * averageDay) {
                     outputItems.push({ ...inputItems[i], DX })
                 } else if (i == 2 * averageDay) {
                     const ADX = DX
                     for (var j = averageDay + 1; j < averageDay * 2; j++) {
-                        ADX += prop(['DX'], outputItems[j])
+                        ADX += outputItems[j].DX
                     }
                     ADX = ADX / averageDay
-                    outputItems.push({ ...inputItems[i], DX, ADX })
+                    outputItems.push({ ...inputItems[i], ADX })
                 } else {
                     const ADX = outputItems[i - 1].ADX * (averageDay - 1) / averageDay + DX / averageDay
-                    outputItems.push({ ...inputItems[i], DX, ADX })
+                    outputItems.push({ ...inputItems[i], ADX })
                 }
             }
         }
